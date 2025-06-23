@@ -23,10 +23,19 @@ public class FirstDemo {
 		//Update place
 		given().log().all().queryParam("key", "qaclick123").header("Content-Type","application/json")
 		.body("{\r\n"
-				+ "\"place_id\":\"e9dfb9f1e6a440f26354e9df0277774d\",\r\n"
+				+ "\"place_id\":\""+placeId+"\",\r\n"
 				+ "\"address\":\"24 winter walk, Singapore\",\r\n"
 				+ "\"key\":\"qaclick123\"\r\n"
 				+ "}").when().put("/maps/api/place/update/json")
 		.then().assertThat().log().all().statusCode(200).body("msg", equalTo("Address successfully updated"));
+	
+		//Get place
+		String getPlaceResponse=given().log().all().queryParam("key", "qaclick123").queryParam("place_id", placeId)
+		.when().get("/maps/api/place/get/json").then().assertThat().log().all().statusCode(200)
+		.extract().response().asString();
+		JsonPath js1=new JsonPath(getPlaceResponse);
+		String actualAddress=js1.getString("address");
+		System.out.println("Actual address: "+actualAddress);
+		
 	}
 }
