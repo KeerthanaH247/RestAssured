@@ -19,5 +19,14 @@ public class FirstDemo {
 		JsonPath js=new JsonPath(response);
 		String placeId=js.getString("place_id");
 		System.out.println(placeId);
+		
+		//Update place
+		given().log().all().queryParam("key", "qaclick123").header("Content-Type","application/json")
+		.body("{\r\n"
+				+ "\"place_id\":\"e9dfb9f1e6a440f26354e9df0277774d\",\r\n"
+				+ "\"address\":\"24 winter walk, Singapore\",\r\n"
+				+ "\"key\":\"qaclick123\"\r\n"
+				+ "}").when().put("/maps/api/place/update/json")
+		.then().assertThat().log().all().statusCode(200).body("msg", equalTo("Address successfully updated"));
 	}
 }
