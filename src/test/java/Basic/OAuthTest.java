@@ -3,6 +3,7 @@ package Basic;
 import static io.restassured.RestAssured.*;
 
 import io.restassured.path.json.JsonPath;
+import pojo.GetCourse;
 public class OAuthTest {
 
 	public static void main(String[] args) {
@@ -16,10 +17,11 @@ public class OAuthTest {
 		System.out.println(response);
 		JsonPath js= new JsonPath(response);
 		String accessToken= js.getString("access_token");
-		String response2=given().queryParam("access_token", accessToken)
+		
+		GetCourse gc=given().queryParam("access_token", accessToken)
 		.when().log().all()
-		.get("https://rahulshettyacademy.com/oauthapi/getCourseDetails").asString();
-		System.out.println(response2);
+		.get("https://rahulshettyacademy.com/oauthapi/getCourseDetails").as(GetCourse.class);
+		System.out.println("LinkedIn: "+gc.getLinkedIn());
 	}
 
 }
